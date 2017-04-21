@@ -1,0 +1,10 @@
+name: mifidii-compliance 
+title: MiFID II Sample Compliance Checks
+maintainer: Contino Ltd.
+copyright: Contino Ltd.
+copyright_email: emre.erkunt@contino.io
+license: Proprietary, All rights reserved
+summary: MiFID II Sample Checks for SCB Demo
+version: 0.1.0
+supports:
+  - inspec: '~> 1.0'
