@@ -29,10 +29,6 @@ control 'integrity-01' do
   redisHostKey = 'scb-demo-integrity-01-hostCount'
   redisCksumKey = 'scb-demo-integrity-01-sha256sum'
 
-  describe command('redis-cli SET test_inspec "HELLO"') do
-    its(:stdout) { should match(/OK/) }
-  end
-
   describe command('sha256sum').exist? do
     it { should eq true }
   end
