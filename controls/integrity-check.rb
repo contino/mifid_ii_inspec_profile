@@ -23,25 +23,28 @@ control 'integrity-01' do
   impact 1.0
   title 'Check for integrity of important files if they are replicated correctly'
   desc 'MiFIDD II - Sample Test 01'
+  tag 'integrity'
 
   # Static Configuration
   numberOfHosts = 3
   redisHostKey = 'scb-demo-integrity-01-hostCount'
   redisCksumKey = 'scb-demo-integrity-01-sha256sum'
+  #redisCli = 'docker exec test-redis redis-cli' # <= This is for local testing.
+  redisCli = "redis-cli"
+  targetDir = './test'
 
   describe command('sha256sum').exist? do
     it { should eq true }
   end
 
-  currentHost = `redis-cli incr #{redisHostKey}`
+  currentHost = `#{redisCli} incr #{redisHostKey}`
   currentHost = currentHost.strip.to_i
 
   describe currentHost do
       it { should be <= numberOfHosts }
   end
 
-  # output = file('/important/files')
-  output = command('find /important/files -name "*.data"').stdout
+  output = command('find '+targetDir+' -name "*.data"').stdout
   fileList = output.split(/\r?\n/)
 
   fileList.each do |fileName|
@@ -53,10 +56,10 @@ control 'integrity-01' do
 
     baseFileName = fileName # Get the file name itself, not the full path.
     redisKey = redisCksumKey + baseFileName
-    redisSha256Sum = `redis-cli get #{redisKey}`.strip
+    redisSha256Sum = `#{redisCli} get #{redisKey}`.strip
 
     if redisSha256Sum == ""
-      `redis-cli set #{redisKey} #{fileObj.sha256sum}`
+      `#{redisCli} set #{redisKey} #{fileObj.sha256sum}`
     else
       describe fileObj do
         its(:sha256sum) { should eq redisSha256Sum }
@@ -64,8 +67,8 @@ control 'integrity-01' do
     end
 
     if currentHost >= numberOfHosts
-      `redis-cli del #{redisKey}`
-      `redis-cli set #{redisHostKey} 0`
+      `#{redisCli} del #{redisKey}`
+      `#{redisCli} set #{redisHostKey} 0`
     end
   end
 
