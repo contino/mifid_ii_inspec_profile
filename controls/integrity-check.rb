@@ -31,7 +31,7 @@ control 'integrity-01' do
   redisCksumKey = 'scb-demo-integrity-01-sha256sum'
   #redisCli = 'docker exec test-redis redis-cli' # <= This is for local testing.
   redisCli = "redis-cli"
-  targetDir = './test'
+  targetDir = '/important/files'
 
   describe command('sha256sum').exist? do
     it { should eq true }

@@ -26,8 +26,9 @@ control 'encryption-01' do
   title 'Check if the files are encrypted with at least 2048 bit keys'
   desc 'MiFIDD II - Sample Test 02'
   tag 'encryption'
+  targetDir = '/important/files'
 
-  output = command('find ./test -name "*.gpg"').stdout
+  output = command('find '+targetDir+' -name "*.gpg"').stdout
   fileList = output.split(/\r?\n/)
 
   fileList.each do |filename|
