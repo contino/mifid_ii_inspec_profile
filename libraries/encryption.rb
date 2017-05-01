@@ -29,7 +29,8 @@ class Encryption < Inspec.resource(1)
 
       @params['key_bits'] = /.*encrypted session key - keyid:.* (\d*)b ./.match(fileDetails)[1].to_i
     rescue Exception
-      return skip_resource "#{@filename}: #{$!}"
+      @params['key_bits'] = 0
+      return false
     end
   end
 
