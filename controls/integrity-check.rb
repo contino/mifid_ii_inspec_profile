@@ -40,9 +40,9 @@ control 'integrity-01' do
   currentHost = `#{redisCli} incr #{redisHostKey}`
   currentHost = currentHost.strip.to_i
 
-  describe currentHost do
-      it { should be <= numberOfHosts }
-  end
+  # describe currentHost do
+  #     it { should be <= numberOfHosts }
+  # end
 
   output = command('find '+targetDir+' -name "*.data"').stdout
   fileList = output.split(/\r?\n/)
